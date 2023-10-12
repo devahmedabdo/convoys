@@ -1,0 +1,19 @@
+<app-header *ngIf="!activeLink.includes('alazhary')"></app-header>
+<router-outlet></router-outlet>
+<app-to-top *ngIf="!activeLink.includes('alazhary')"></app-to-top>
+<app-compare *ngIf="!activeLink.includes('alazhary')"></app-compare>
+<app-footer *ngIf="!activeLink.includes('alazhary')"></app-footer>
+<!-- <div *ngIf="temp"
+  class=" gap-4 shadow-xl rounded-md cursor-pointer flex flex-col justify-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 bg-zinc-50 z-50 items-center">
+  <div (click)="temp=false" class="w-10 h-10 bg-orange-400 text-white rounded-full text-center leading-10 ">X</div>
+  <span>we still working on the project </span>
+  <span>pages have been done</span>
+  <span routerLink="/">home</span>
+  <span routerLink="/login">login</span>
+  <span routerLink="/signup">signup</span>
+  <span routerLink="/blogs">Blogs</span>
+  <span routerLink="/blog">Blog</span>
+  <span routerLink="/anyrout">notfound</span>
+
+
+</div> -->

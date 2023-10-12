@@ -1,0 +1,88 @@
+<div class="container pt-3">
+  <ng-container *ngIf="request.length">
+    <div class="data-tabel">
+
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <td>Test Name</td>
+              <td>Price</td>
+              <td>Delete</td>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let req of request;let i =index">
+              <td class="w-32">{{req.name}}</td>
+              <td>{{req.price}}</td>
+              <td>
+                <button (click)="remove(i)" class="btn error">
+                  <fa-icon [icon]="deleteIcon"></fa-icon>
+
+                </button>
+              </td>
+            </tr>
+
+
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total : </td>
+              <td colspan="2"> {{+total }}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+      </div>
+    </div>
+    <hr>
+  </ng-container>
+  <form #loginForm="ngForm" class="flex gap-2 flex-wrap">
+    <div class="form-group flex-grow">
+      <label for="code">Test Code</label>
+      <div>
+        <input id="code" type="text" placeholder="Enter Test Code" #code (keyup)="searchCode = code.value">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label for="Name">Test Name</label>
+      <div>
+        <input id="Name" type="text" placeholder="Enter Test Name" #name
+          (keyup)="searchName = name.value.toLowerCase()">
+      </div>
+    </div>
+  </form>
+  <hr>
+
+  <div class="data-tabel">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Test Name</td>
+            <td>Price</td>
+            <td>Add</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let test of tests">
+            <tr
+              [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
+              <td class="w-32">{{test.name}}</td>
+              <td>{{test.price}}</td>
+              <td>
+                <button class="primary btn" (click)="add(test)" [disabled]="isDublicate(test,request)">
+                  <fa-icon [icon]="addIcon"></fa-icon>
+                </button>
+              </td>
+            </tr>
+
+          </ng-container>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>

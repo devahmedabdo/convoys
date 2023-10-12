@@ -1,0 +1,49 @@
+$animTime: 0.5s;
+.animation {
+  opacity: 0;
+  transition-duration: $animTime;
+  transition-property: color, background-color, box-shadow, border, transform,
+    opacity;
+  transition-delay: 0ms, 0ms, 0ms, 0ms, calc(var(--d, 0) * 0.1s),
+    calc(var(--d, 0) * 0.1s);
+}
+.rReveal {
+  @apply animation;
+  transform: translateX(70px) translateY(0px);
+}
+.lReveal {
+  @apply animation;
+  transform: translateX(-70px) translateY(0px);
+}
+.uReveal {
+  @apply animation;
+  transform: translateY(-70px) translateX(0px);
+}
+.dReveal {
+  @apply animation;
+  transform: translateY(70px) translateX(0px);
+}
+.imgReveal {
+  height: var(--h, 450px);
+  @apply flex items-end;
+  img {
+    opacity: 0;
+    filter: grayscale(1);
+    object-fit: cover;
+    height: 0%;
+    transition: height $animTime 0s, filter $animTime $animTime,
+      opacity $animTime 0s;
+  }
+}
+.reveal {
+  transform: translateX(0px) translateY(0px) !important;
+  opacity: 1 !important;
+}
+.imgUnReveal {
+  img {
+    opacity: 1;
+    filter: grayscale(0);
+    height: 100%;
+    filter: grayscale(0);
+  }
+}
