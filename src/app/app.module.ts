@@ -15,12 +15,13 @@ import { defineElement } from 'lord-icon-element';
 import lottie from 'lottie-web';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { AlazharyComponent } from './views/alazhary/alazhary.component';
+import { CardComponent } from './views/card/card.component';
 
 // import { BlogsComponent } from './views/blogs/blogs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
-  declarations: [AppComponent, AlazharyComponent],
+  declarations: [AppComponent, AlazharyComponent, CardComponent],
   imports: [
     HttpClientModule,
     BrowserModule,

@@ -1,0 +1,38 @@
+.card {
+  border-radius: 25%;
+  font-family: "";
+  .img-box {
+    &::after {
+      z-index: -1;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, #ff141400 10%, #ffffff67 81%);
+    }
+  }
+
+  .circle-box {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      overflow: visible;
+      width: 100px;
+      height: 100px;
+      circle {
+        fill: none;
+        stroke: url(#GradientColor);
+        stroke-width: 10px;
+        transition: 1s;
+        stroke-dasharray: 250px;
+        // stroke: red;
+      }
+    }
+  }
+}
