@@ -1,4 +1,40 @@
 @use "./animation.scss" as *;
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-Bold.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ElMessiri";
+  src: url("assets/fonts/ElMessiri-Bold.ttf");
+  font-weight: 900;
+  font-style: normal;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,7 +45,7 @@
     --header-height: 70px;
     body {
       @apply bg-white bg-opacity-40 text-zinc-800;
-      font-family: Poppins;
+      font-family: "ElMessiri";
       input:-internal-autofill-selected {
         appearance: unset !important;
         color: unset !important;

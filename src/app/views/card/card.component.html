@@ -2,7 +2,7 @@
   <div class="card max-w-sm flex flex-col items-center  overflow-hidden">
     <!-- image -->
     <div class="img-box z-0 relative py-12 bg-cyan-900 mb-10">
-      <img class="w-1/2 rounded-full mx-auto" src="../../../assets/user.png" alt="">
+      <img class="w-1/2 rounded-full mx-auto shadow" src="assets/user.png" alt="member image">
       <svg class="absolute top-full left-0 w-full rotate-180 -mt-[1px]" xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1020 82">
         <g transform="translate(510,41) scale(1,-1) translate(-510,-41)">
@@ -50,30 +50,56 @@
       </svg>
     </div>
     <!-- name -->
-    <h3>أحمد عبده</h3>
-    <h4>لجنة الميديا</h4>
+    <h3 class="text-4xl font-bold text-cyan-900">{{user?.name.first.ar + ' '+ user?.name.last.ar}}</h3>
+    <h4 class="text-xl font-medium text-cyan-400">{{user?.committee}}</h4>
     <hr>
-    <div class="flex">
-      <div class="flex-grow circle-box">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-          <defs>
-            <linearGradient id="GradientColor">
-              <stop offset="0%" [attr.stop-color]="color_1" />
-              <stop offset="100%" [attr.stop-color]="color_2" />
-            </linearGradient>
-          </defs>
-          <circle cx="50" cy="50" r="40" fill="none" stroke-linecap="round" />
-          <text>23</text>
-        </svg>
-        <div class="in-box-skill">
-
-          <h2>2</h2>
+    <div class="flex gap-4">
+      <div class="flex-grow text-center">
+        <span>القوافل</span>
+        <div class="circle-box" [style]="'--stroke:' + convoys_diffrent">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+              <linearGradient id="GradientColor">
+                <stop offset="0%" [attr.stop-color]="color_1" />
+                <stop offset="100%" [attr.stop-color]="color_2" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="40" fill="none" stroke-linecap="round" />
+          </svg>
+          <h2 class="font-bold text-cyan-500 font-sans">{{user.convoys.length}}</h2>
         </div>
+
       </div>
       <div class="border">
-
+      </div>
+      <div class="flex-grow text-center">
+        <span>الاقدمية</span>
+        <div class="circle-box" [style]="'--stroke:' + year_diffrent">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <defs>
+              <linearGradient id="GradientColor">
+                <stop offset="0%" [attr.stop-color]="color_1" />
+                <stop offset="100%" [attr.stop-color]="color_2" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="40" fill="none" stroke-linecap="round" />
+          </svg>
+          <h2 class="font-bold text-cyan-500 font-sans">{{year_count | number :'1.0-0'}}</h2>
+        </div>
       </div>
 
+    </div>
+    <div class="flex gap-2 pt-4 social-btn">
+      <ng-container *ngFor="let link of user.socialAccounts | keyvalue">
+        <a *ngIf="link.value" href="{{link.value}}">
+          <!-- <fa-icon [icon]="link.key"></fa-icon> -->
+          <i class="fab fa-{{link.key}}"> </i>
+        </a>
+      </ng-container>
+
+      <!-- <fa-icon [icon]="icons.whats"></fa-icon>
+      <fa-icon [icon]="icons.instagram"></fa-icon>
+      <fa-icon [icon]="icons.twitter"></fa-icon> -->
     </div>
   </div>
 </div>
