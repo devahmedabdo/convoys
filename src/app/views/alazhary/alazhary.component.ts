@@ -22,8 +22,6 @@ export class AlazharyComponent implements OnInit {
     { code: '126', name: '5-hydroxyindol acetic acid (5-HIAA)', price: '150' },
     { code: '32', name: 'A/G Ratio', price: '30' },
     { code: '268', name: 'ABG Test', price: '300' },
-    { code: '6', name: 'Acetone in urine', price: '10' },
-    { code: '9', name: 'Acetone in urine', price: '10' },
     { code: '3', name: 'Acetone in urine', price: '10' },
     { code: '359', name: 'Acid fast Stain for Sputum', price: '45' },
     { code: '361', name: 'Acid fast Stain for Urine', price: '45' },
@@ -519,6 +517,23 @@ export class AlazharyComponent implements OnInit {
     this.calc();
     let add = new Audio('../../../assets/add.mp3');
     add.play();
+    this.searchCode = '';
+    this.searchName = '';
+  }
+  addWithEnter(btn: any, value: any, type: any) {
+    if (btn.keyCode == 13) {
+      let ele = this.tests.find((e) => {
+        if (type == 'code') {
+          return e.code == value;
+        }
+        return e.name.toLocaleLowerCase().includes(value);
+      });
+
+      if (ele && !this.isDublicate(ele, this.request)) {
+        this.add(ele);
+        this.calc();
+      }
+    }
   }
   isDublicate(ele: any, arr: any[]) {
     let isExist = arr.filter((arrEle) => {
