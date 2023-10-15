@@ -21,7 +21,7 @@ export class CardComponent implements OnInit {
     convoys_count: 20,
   };
   // icons: any = {
-  //   facebook: faFacebookF,
+  //   facebook-f: faFacebookF,
   //   instagram: faInstagram,
   //   whatsapp: faWhatsapp,
   //   twitter: faTwitter,
