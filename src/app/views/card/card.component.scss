@@ -44,4 +44,11 @@
       }
     }
   }
+  .social-btns {
+    a {
+      &:hover {
+        box-shadow: inset 0px 6px 4px #00000082;
+      }
+    }
+  }
 }

@@ -89,17 +89,13 @@
       </div>
 
     </div>
-    <div class="flex gap-2 pt-4 social-btn">
+    <div class="flex gap-2 py-5 social-btns">
       <ng-container *ngFor="let link of user.socialAccounts | keyvalue">
-        <a *ngIf="link.value" href="{{link.value}}">
-          <!-- <fa-icon [icon]="link.key"></fa-icon> -->
+        <a class="w-9 h-9 flex items-center justify-center bg-cyan-900 rounded-full text-white duration-300 hover:bg-cyan-400  hover:text-cyan-900  "
+          *ngIf="link.value" href="{{link.value}}">
           <i class="fab fa-{{link.key}}"> </i>
         </a>
       </ng-container>
-
-      <!-- <fa-icon [icon]="icons.whats"></fa-icon>
-      <fa-icon [icon]="icons.instagram"></fa-icon>
-      <fa-icon [icon]="icons.twitter"></fa-icon> -->
     </div>
   </div>
 </div>

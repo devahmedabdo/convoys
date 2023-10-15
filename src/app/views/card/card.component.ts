@@ -46,8 +46,10 @@ export class CardComponent implements OnInit {
     joinDate:
       'Mon Jan 01 2019 02:00:00 GMT+0200 (Eastern European Standard Time)',
     socialAccounts: {
-      facebook: 'facebook.com/awdwdawd',
+      'facebook-f': 'facebook.com/awdwdawd',
       whatsapp: '322352352',
+      instagram: 'awdawd',
+      twitter: 'awdawd',
     },
     faculty: 'science',
     password: '12345qwe',
