@@ -1,0 +1,145 @@
+<div class="py-3 flex justify-center gap-2 text-xl font-bold">
+  <button routerLink="/payments">الحسابات</button>
+  <button routerLink="/patients">المرضى</button>
+</div>
+<div class="container pt-3" dir="rtl">
+  <form #addPatient="ngForm" class="flex gap-2 flex-wrap items-end">
+    <div class="form-group flex-grow">
+      <label>الاسم</label>
+      <div>
+        <input required #name="ngModel" ngModel name="name" type="text" placeholder="اسم المريض">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label>السن</label>
+      <div>
+        <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required
+          #age="ngModel" ngModel name="age" type="text" placeholder="اسم المريض">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label>الطبيب</label>
+      <div>
+        <input #doctorName="ngModel" ngModel name="doctorName" type="text" placeholder="اسم الطبيب">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label>مدفوع</label>
+      <div>
+        <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" #pay="ngModel"
+          ngModel name="pay" type="text" placeholder="المبلغ المدفوع">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label>الخصم</label>
+      <div>
+        <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+          #disscount="ngModel" ngModel name="disscount" type="text" placeholder="الخصم">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label>الباقي</label>
+      <div>
+        <input readonly [value]="+total -  pay.value - disscount.value" type="text" placeholder="الباقي">
+      </div>
+    </div>
+    <button class="btn primary leading-3 w-10" (click)="savePatient(addPatient)"
+      [disabled]="addPatient.invalid || !request.length">
+      <fa-icon [icon]="addIcon"></fa-icon>
+    </button>
+
+    <ng-container *ngIf="request.length">
+      <div class="data-tabel mt-4 w-full ">
+
+        <div class="max-h-80">
+          <table>
+            <thead>
+              <tr>
+                <td>كود التحليل</td>
+                <td>السعر ({{total}})</td>
+                <td (click)="request=[]">
+                  حذف الكل
+
+
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let req of request;let i =index">
+                <td class="w-32">{{req.name}}</td>
+                <td>{{req.price}}</td>
+                <td>
+                  <button (click)="remove(i)" class="btn error">
+                    <fa-icon [icon]="deleteIcon"></fa-icon>
+
+                  </button>
+                </td>
+              </tr>
+
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total : </td>
+                <td colspan="2"> {{+total }}</td>
+              </tr>
+            </tfoot>
+          </table>
+
+        </div>
+      </div>
+      <hr>
+    </ng-container>
+  </form>
+
+
+  <form #loginForm="ngForm" class="flex gap-2 flex-wrap mt-2">
+    <div class="form-group flex-grow">
+      <label for="code">كود التحليل</label>
+      <div>
+        <input id="code" type="text" placeholder="كود التحليل" [(ngModel)]="searchCode"
+          (ngModelChange)="searchName = ''" name="code" (keydown)="addWithEnter($event,searchCode,'code')">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label for="Name">اسم التحليل</label>
+      <div>
+        <input id="Name" type="text" placeholder="اسم التحليل" (keydown)="addWithEnter($event,searchName,'name')"
+          [ngModel]="searchName | lowercase" (ngModelChange)="searchName = $event ; searchCode = ''" name="name">
+      </div>
+    </div>
+  </form>
+  <hr>
+
+  <div class="data-tabel">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>Test Name</td>
+            <td>Price</td>
+            <td>Add</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let test of tests">
+            <tr
+              [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
+              <td class="w-32">{{test.name}}</td>
+              <td>{{test.price}}</td>
+              <td>
+                <button class="primary btn" (click)="add(test)" [disabled]="isDublicate(test,request)">
+                  <fa-icon [icon]="addIcon"></fa-icon>
+                </button>
+              </td>
+            </tr>
+
+          </ng-container>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div>

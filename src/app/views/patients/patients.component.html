@@ -1,0 +1,65 @@
+<div class="py-3 flex justify-center gap-2 text-xl font-bold">
+  <button routerLink="/system">اضافة</button>
+  <button routerLink="/payments">الحسابات</button>
+</div>
+<div class="py-3 border-y my-2 px-4 flex items-end gap-2">
+  <div class="form-group">
+    <label>التاريخ</label>
+    <div>
+      <input type="date" placeholder="اختر التاريخ" name="date" [ngModel]="chosenDate"
+        (ngModelChange)="changeDate($event)">
+    </div>
+  </div>
+  <button *ngIf="date" (click)="date=null" class="btn primary aspect-auto">
+    حذف الفلتره
+  </button>
+  <div *ngIf="date" class="p-2 bg-orange-100 rounded-lg">
+    عرض النتائج الخاصة بيوم {{date}}
+  </div>
+</div>
+<div class="data-tabel px-4">
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <td>اسم المريض</td>
+          <td>السن</td>
+          <td>الطبيب</td>
+          <td>اجمالى الحساب</td>
+          <td>خصم</td>
+          <td>مدفوع</td>
+          <td>باقي</td>
+          <td>التحاليل المطلوبه</td>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let patient of patients">
+          <tr [hidden]="date != patient.date && date">
+            <td>{{patient.name}}</td>
+            <td>{{patient.age}}</td>
+            <td>{{patient.doctorName}}</td>
+            <td>{{patient.total}}</td>
+            <td>{{patient.disscount}}</td>
+            <td>{{patient.pay}}</td>
+            <td>
+              <span
+                class="p-1 px-2 rounded-lg {{(patient.total - patient.pay - patient.disscount) ? 'text-red-500 bg-red-100':''}}">
+                {{patient.total - patient.pay - patient.disscount}}
+              </span>
+            </td>
+            <td>
+              <ng-container *ngFor="let test of patient.tests">
+                <span>
+                  {{test.name}}
+                </span>
+                <br>
+              </ng-container>
+            </td>
+          </tr>
+
+        </ng-container>
+      </tbody>
+    </table>
+
+  </div>
+</div>

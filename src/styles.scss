@@ -299,50 +299,42 @@
     appearance: unset;
     @extend .formInput;
   }
-  // .formInput {
-  //   > div {
-  //     @apply w-full flex items-center justify-between p-1 bg-zinc-50 px-5 py-4 rounded-2xl relative;
-  //     input {
-  //       @apply pt-3 accent-orange-400 w-full font-bold;
-  //       &:focus {
-  //         & + label {
-  //           @apply text-xs top-2;
-  //         }
-  //       }
-  //     }
-  //     label {
-  //       @apply absolute left-5 top-6 duration-300;
-  //       &.active {
-  //         @apply top-2 text-xs;
-  //       }
-  //     }
-  //     fa-icon {
-  //       @apply text-zinc-500 duration-300 text-xl cursor-pointer;
-  //     }
-  //   }
-  //   p {
-  //     @apply translate-y-6 opacity-0 duration-300 px-4 py-1 text-xs text-red-500;
-  //     &.error {
-  //       @apply translate-y-0 opacity-100;
-  //     }
-  //   }
-  //   &.active {
-  //     label {
-  //       @apply text-orange-400;
-  //     }
-  //     fa-icon {
-  //       @apply text-orange-400;
-  //     }
-  //   }
-  //   &.error {
-  //     > div {
-  //       label {
-  //         @apply text-red-500;
-  //       }
-  //       fa-icon {
-  //         @apply text-red-500;
-  //       }
-  //     }
-  //   }
-  // }
+  .data-tabel {
+    @apply overflow-hidden;
+    > div {
+      @apply px-2 pb-3 overflow-auto;
+      &::-webkit-scrollbar {
+        @apply w-2 bg-neutral-200 rounded-full;
+      }
+      &::-webkit-scrollbar-button {
+        @apply hidden;
+      }
+      &::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-blue-500 hover:bg-blue-400 active:bg-blue-900;
+      }
+
+      > table {
+        @apply w-full overflow-scroll rounded-lg bg-white;
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.08),
+          0px 2px 1px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+
+        thead {
+          @apply text-neutral-400;
+          tr {
+            @apply hover:bg-transparent;
+          }
+        }
+        td,
+        th {
+          @apply p-3.5 text-start px-4 font-normal;
+        }
+        tr {
+          @apply duration-300 hover:bg-neutral-100 cursor-pointer;
+        }
+      }
+    }
+    button {
+      width: 40px;
+    }
+  }
 }
