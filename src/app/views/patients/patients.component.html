@@ -63,3 +63,229 @@
 
   </div>
 </div>
+
+<!-- modals -->
+<div *ngIf="modal.type" class="modal">
+  <!-- button to close modal -->
+  <button [@fade] (click)="resetModal()"></button>
+  <div [@uReveal]>
+    <!-- modal header -->
+    <div>
+      <h3>تعديل المريض</h3>
+      <button (click)="resetModal()">
+        <img src="assets/icons/x-mark-b.svg" alt="close icon">
+      </button>
+    </div>
+
+
+    <!-- modal data  -->
+    <!-- add budget and edit -->
+    <form #addBudgetForm="ngForm" *ngIf="modal.type == 'addBudget' || modal.type == 'editBudget'">
+      <hr>
+
+      <ng-container *ngIf="modal?.data?.status || !modal?.data?.uuid ">
+        <div class="two-col">
+          <div class="form-group required">
+            <label for="budgetName">إسم المريض <span>( عربى ) </span></label>
+            <div>
+              <input type="text" id="budgetName" name="budgetName" #budgetName="ngModel"
+                [(ngModel)]="modal.data.name.ar" required
+                (keypress)="formStatus.errors?.budgetName ? formStatus.errors.budgetName = null:''"
+                placeholder="ادخل اسم الباقة">
+            </div>
+            <p>
+              <span *ngIf="budgetName.touched && !formStatus.errors?.budgetName">
+                <span *ngIf="budgetName.errors?.['required']">هذا الحقل مطلوب</span>
+              </span>
+              <span *ngIf="formStatus.errors?.['name.ar']">{{formStatus.errors?.['name.ar'][0]}}</span>
+            </p>
+          </div>
+          <div class="form-group required">
+            <label for="budgetNameEn">إسم الباقة <span>( انجليزى ) </span></label>
+            <div>
+              <input type="text" id="budgetNameEn" name="budgetNameEn" [(ngModel)]="modal.data.name.en"
+                #budgetNameEn="ngModel" ngModel required
+                (keypress)="formStatus.errors?.budgetNameEn ? formStatus.errors.budgetNameEn = null:''"
+                placeholder="ادخل اسم الباقة">
+            </div>
+            <p>
+              <span *ngIf="budgetNameEn.touched && !formStatus.errors?.budgetNameEn">
+                <span *ngIf="budgetNameEn.errors?.['required']">هذا الحقل مطلوب</span>
+              </span>
+              <span *ngIf="formStatus.errors?.['name.en']">{{formStatus.errors?.['name.en'][0]}}</span>
+
+            </p>
+          </div>
+          <div class="form-group required">
+            <label for="budgetDiscription">وصف الباقة <span>( عربى ) </span></label>
+            <div>
+              <input type="text" id="budgetDiscription" name="budgetDiscription" #budgetDiscription="ngModel"
+                [(ngModel)]="modal.data.description.ar" required
+                (keypress)="formStatus.errors?.budgetDiscription ? formStatus.errors.budgetDiscription = null:''"
+                placeholder="ادخل اسم الباقة">
+            </div>
+            <p>
+              <span *ngIf="budgetDiscription.touched && !formStatus.errors?.budgetDiscription">
+                <span *ngIf="budgetDiscription.errors?.['required']">هذا الحقل مطلوب</span>
+              </span>
+              <span *ngIf="formStatus.errors?.['description.ar']">{{formStatus.errors?.['description.ar'][0]}}</span>
+
+            </p>
+          </div>
+          <div class="form-group required">
+            <label for="budgetDiscriptionEn">وصف الباقة <span>( انجليزى ) </span></label>
+            <div>
+              <input type="text" id="budgetDiscriptionEn" name="budgetDiscriptionEn" #budgetDiscriptionEn="ngModel"
+                [(ngModel)]="modal.data.description.en" required
+                (keypress)="formStatus.errors?.budgetDiscriptionEn ? formStatus.errors.budgetDiscriptionEn = null:''"
+                placeholder="ادخل اسم الباقة">
+            </div>
+            <p>
+              <span *ngIf="budgetDiscriptionEn.touched && !formStatus.errors?.budgetDiscriptionEn">
+                <span *ngIf="budgetDiscriptionEn.errors?.['required']">هذا الحقل مطلوب</span>
+              </span>
+              <span *ngIf="formStatus.errors?.['description.en']">{{formStatus.errors?.['description.en'][0]}}</span>
+
+            </p>
+          </div>
+          <div class="form-group required">
+            <label for="price">السعر <span>( بالريال )</span> </label>
+            <div>
+              <input type="text" id="price" name="price" #price="ngModel" [(ngModel)]="modal.data.price" required
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                (keypress)="formStatus.errors?.price ? formStatus.errors.price = null:''"
+                placeholder="حدد قيمة مناسبة للباقة">
+            </div>
+            <p>
+              <span *ngIf="price.touched && !formStatus.errors?.price">
+                <span *ngIf="price.errors?.['required']">هذا الحقل مطلوب</span>
+              </span>
+              <span *ngIf="formStatus.errors?.price">{{formStatus.errors?.price}}</span>
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class="my-1" [(ngModel)]="modal.data.best_choice" nz-checkbox ngModel #best_choice='ngModel'
+            name="best_choice">افضل
+            اختيار</label>
+        </div>
+        <label class="my-1" [(ngModel)]="modal.data.newable" nz-checkbox ngModel #newable='ngModel' name="newable">متاح
+          للعملاء
+          الجدد</label>
+      </ng-container>
+      <hr>
+      <div class="buttons">
+        <button class="btn" (click)="resetModal()">الرجوع</button>
+        <button *ngIf="modal.type == 'addBudget'" class="btn success relative overflow-hidden"
+          [disabled]="addBudgetForm.invalid" (click)="addBudget(addBudgetForm)">
+          <span>إضافة الباقة</span>
+          <span class="loading bg-success-500" *ngIf="formStatus.loading">
+            <span></span>
+          </span>
+        </button>
+        <button *ngIf="modal.type == 'editBudget'" class="btn success relative overflow-hidden"
+          [disabled]="addBudgetForm.invalid" (click)="editBudget()">
+          <span>تعديل</span>
+          <span class="loading bg-success-500" *ngIf="formStatus.loading">
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </form>
+    <!-- edit budget -->
+    <form #addService="ngForm" *ngIf="modal.type == 'addBudgetService'">
+      <hr>
+      <div class="grid sm:grid-cols-2 gap-2 items-center">
+        <div class="form-group required flex-grow">
+          <label for="name">اسم الخدمة </label>
+          <nz-select id="name" name="feature" [(ngModel)]="tempData.feature" #feature="ngModel" ngModel required
+            [nzShowArrow]="false" nzPlaceHolder="إختر الخدمة">
+            <nz-option [nzDisabled]="isDublicated(tempFeatures,feature) " *ngFor="let feature of selectData.features"
+              [nzValue]="feature" nzLabel="{{feature.name}}"></nz-option>
+          </nz-select>
+          <p>
+            <span *ngIf="feature.touched && !formStatus.errors?.feature">
+              <span *ngIf="feature.errors?.['required']">هذا الحقل مطلوب</span>
+            </span>
+            <span *ngIf="formStatus.errors?.feature">{{formStatus.errors?.feature}}</span>
+          </p>
+        </div>
+        <div class="form-group flex-grow">
+          <label for="extra_price">السعر الإضافى <span>( بالريال )</span> </label>
+          <div>
+            <input [(ngModel)]="tempData.extra_price" type="extra_price" id="extra_price" name="extra_price"
+              #extra_price="ngModel" ngModel
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              (keypress)="formStatus.errors?.extra_price ? formStatus.errors.extra_price = null:''"
+              placeholder="حدد سعر مناسب للخدمة">
+          </div>
+          <p>
+            <span *ngIf="formStatus.errors?.extra_price">{{formStatus.errors?.extra_price}}</span>
+          </p>
+        </div>
+        <div class="form-group flex-grow">
+          <label for="counter">التكرار </label>
+          <div>
+            <input [(ngModel)]="tempData.counter" type="counter" id="counter" name="counter" #counter="ngModel" ngModel
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              (keypress)="formStatus.errors?.counter ? formStatus.errors.counter = null:''"
+              placeholder="حدد عدد مرات التكرار">
+          </div>
+          <p>
+            <span *ngIf="formStatus.errors?.counter">{{formStatus.errors?.counter}}</span>
+          </p>
+        </div>
+        <button type="button" class="btn success w-fit mt-2" (click)="addFeatures(addService)"
+          [disabled]="!tempData.feature">
+          اضافة المزيد
+        </button>
+      </div>
+      <div class="data-tabel" *ngIf="tempFeatures.length">
+        <div class="max-h-96">
+          <table class="custom-table retm-card">
+            <thead>
+              <tr>
+                <th>اسم الخدمة</th>
+                <th>القيمة</th>
+                <th>التكرار</th>
+                <th>خيارات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let feature of tempFeatures ;let i = index">
+                <td>{{feature?.feature?.name ||feature?.name }}</td>
+                <td>{{feature.extra_price || 0}}</td>
+                <td>{{feature.counter || 0}}</td>
+                <td>
+                  <div class="flex gap-2">
+                    <button (click)="editFeatures(feature,i)"
+                      class="py-1 px-2 hover:text-white bg-warning-50 hover:bg-warning-400 rounded-lg duration-300">
+                      تعديل
+                    </button>
+                    <button (click)="tempFeatures.splice(i,1)"
+                      class="py-1 px-2 hover:text-white bg-error-50 hover:bg-error-400 rounded-lg duration-300">
+                      حذف
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr>
+      <div class="buttons">
+        <button class="btn" (click)="resetModal()">الرجوع</button>
+        <button class="btn success relative overflow-hidden" [disabled]="addService.invalid && !tempFeatures.length"
+          (click)="attachFeature(addService)">
+          <span>إضافة الخدمة</span>
+          <span class="loading bg-success-500" *ngIf="formStatus.loading">
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </form>
+
+
+  </div>
+</div>
