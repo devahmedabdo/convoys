@@ -2,7 +2,8 @@
   <div class="card max-w-sm flex flex-col items-center  overflow-hidden">
     <!-- image -->
     <div class="img-box z-0 relative py-12 bg-cyan-900 mb-10">
-      <img class="w-1/2 rounded-full mx-auto shadow" src="assets/user.png" alt="member image">
+      <img class="w-1/2 aspect-square object-cover object-center rounded-full mx-auto shadow" src="assets/user.png"
+        alt="member image">
       <svg class="absolute top-full left-0 w-full rotate-180 -mt-[1px]" xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1020 82">
         <g transform="translate(510,41) scale(1,-1) translate(-510,-41)">
@@ -73,7 +74,7 @@
       <div class="border">
       </div>
       <div class="flex-grow text-center">
-        <span>الاقدمية</span>
+        <span>الإنضمام</span>
         <div class="circle-box" [style]="'--stroke:' + year_diffrent">
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
             <defs>
@@ -84,7 +85,7 @@
             </defs>
             <circle cx="50" cy="50" r="40" fill="none" stroke-linecap="round" />
           </svg>
-          <h2 class="font-bold text-cyan-500 font-sans">{{year_count | number :'1.0-0'}}</h2>
+          <h2 class="font-bold text-cyan-500 font-sans">{{user?.joinDate | date:'YYYY'}}</h2>
         </div>
       </div>
 
