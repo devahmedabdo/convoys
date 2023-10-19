@@ -5,12 +5,15 @@ import { CardComponent } from './views/card/card.component';
 import { SystemComponent } from './views/system/system.component';
 import { PatientsComponent } from './views/patients/patients.component';
 import { PaymentsComponent } from './views/payments/payments.component';
+import { ExpensesComponent } from './views/expenses/expenses.component';
 
 const routes: Routes = [
-  { path: '', component: AlazharyComponent },
+  { path: '', component: SystemComponent },
   { path: 'system', component: SystemComponent },
   { path: 'patients', component: PatientsComponent },
   { path: 'payments', component: PaymentsComponent },
+  { path: 'expenses', component: ExpensesComponent },
+  { path: 'omnia', component: AlazharyComponent },
   { path: 'a', component: CardComponent },
 ];
 

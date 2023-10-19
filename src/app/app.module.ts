@@ -19,6 +19,7 @@ import { CardComponent } from './views/card/card.component';
 import { SystemComponent } from './views/system/system.component';
 import { PatientsComponent } from './views/patients/patients.component';
 import { PaymentsComponent } from './views/payments/payments.component';
+import { ExpensesComponent } from './views/expenses/expenses.component';
 
 // import { BlogsComponent } from './views/blogs/blogs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -31,6 +32,7 @@ import { PaymentsComponent } from './views/payments/payments.component';
     SystemComponent,
     PatientsComponent,
     PaymentsComponent,
+    ExpensesComponent,
   ],
   imports: [
     HttpClientModule,

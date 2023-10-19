@@ -563,10 +563,11 @@ export class SystemComponent implements OnInit {
     let patients: any = this.get();
     let newPatient: any = data.value;
     newPatient['tests'] = this.request;
+    // newPatient['date'] = new Date().toDateString();
     newPatient['date'] = new Date().toDateString();
     newPatient['total'] = this.total;
     console.log(patients);
-    patients.push(newPatient);
+    patients.unshift(newPatient);
     this.save(patients);
     console.log(patients);
     console.log(newPatient);

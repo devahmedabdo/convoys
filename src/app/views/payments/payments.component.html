@@ -1,4 +1,95 @@
-<div class="py-3 flex justify-center gap-2 text-xl font-bold">
-  <button routerLink="/system">اضافة</button>
-  <button routerLink="/patients">المرضى</button>
+<div class="header-btn no-print">
+  <button routerLink="/system" routerLinkActive="active">اضافة</button>
+  <button routerLink="/patients" routerLinkActive="active">المرضي</button>
+  <button routerLink="/payments" routerLinkActive="active">الحسابات</button>
+  <button routerLink="/expenses" routerLinkActive="active">المصروفات</button>
+</div>
+<div class="container">
+  <div class="no-print py-3  ">
+
+    <button (click)="print()" class="btn primary flex gap-2 items-center">
+      <span>PDF</span>
+      <fa-icon [icon]="pdf"></fa-icon>
+    </button>
+  </div>
+
+  <div class="px-4 flex gap-4 flex-col items-center mb-5" *ngIf="patients.length">
+    تقرير عن الحسابات من تاريخ
+    <div>
+      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.from}}</span>
+      الى
+      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
+    </div>
+  </div>
+  <div class="px-2 font-bold grid grid-cols-4  gap-4 text-lg justify-center justify-items-center">
+    <div class="flex gap-3 items-center p-4 flex-col-reverse marker">
+      <span>ايرادات المعمل</span>
+      <span class="">{{mony.total}}</span>
+    </div>
+    <div class="flex gap-3 items-center p-4 flex-col-reverse marker warning">
+      <span>المصروفات</span>
+      <span class="  ">{{mony.expenses}}</span>
+    </div>
+    <div class="flex gap-3 items-center p-4 flex-col-reverse marker primary">
+      <span>صافى النقدية</span>
+      <span class="   ">{{mony.exist}}</span>
+    </div>
+    <div class="flex gap-3 items-center p-4 flex-col-reverse marker error">
+      <span>اجمالى المديونية</span>
+      <span class="   ">{{mony.depit}}</span>
+    </div>
+  </div>
+  <div class="mt-4" *ngIf="deptPatients.length">
+    <h2 class="px-2 text-xl font-bold">المديونيات</h2>
+    <div class="data-tabel mt-2">
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <td>اسم المريض</td>
+              <!-- <td>السن</td>
+              <td>الطبيب</td> -->
+              <td>اجمالى الحساب</td>
+              <td>خصم</td>
+              <td>مدفوع</td>
+              <td>باقي</td>
+              <td>التاريخ</td>
+              <!-- <td>التحاليل المطلوبه</td> -->
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let patient of deptPatients ;let i = index">
+              <tr>
+                <td>{{patient.name}}</td>
+                <!-- <td>{{patient.age}}</td>
+                <td>{{patient.doctorName}}</td> -->
+                <td>{{patient.total}}</td>
+                <td>{{patient.disscount || '-'}}</td>
+                <td>{{patient.pay || 0}}</td>
+                <td>
+                  <span
+                    class="p-1 px-2 rounded-lg {{(patient.total - patient.pay - patient.disscount) ? 'text-red-500 bg-red-100':''}}">
+                    {{patient.total - patient.pay - patient.disscount}}
+                  </span>
+                </td>
+                <td>
+                  {{patient.date | date:'shortDate'}}
+                </td>
+                <!-- <td>
+                  <ng-container *ngFor="let test of patient.tests">
+                    <span>
+                      {{test.name}}
+                    </span>
+                    <br>
+                  </ng-container>
+                </td> -->
+              </tr>
+
+            </ng-container>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,107 @@
+<div class="header-btn no-print ">
+  <button routerLink="/system" routerLinkActive="active">اضافة</button>
+  <button routerLink="/patients" routerLinkActive="active">المرضي</button>
+  <button routerLink="/payments" routerLinkActive="active">الحسابات</button>
+  <button routerLink="/expenses" routerLinkActive="active">المصروفات</button>
+</div>
+
+<div class="container px-4">
+
+
+  <div class="no-print py-3 border-t my-2 mx-4 items-end flex justify-between gap-2">
+    <div>
+      <button (click)="modal.type = 'add'" class="btn primary">اضافة مصروف</button>
+    </div>
+
+    <div class="flex gap-2">
+      <button (click)="generateExcel()" class="btn primary flex gap-2 items-center">
+        <span>Excel</span>
+        <fa-icon [icon]="excel"></fa-icon>
+      </button>
+      <button (click)="print()" class="btn primary flex gap-2 items-center">
+        <span>PDF</span>
+        <fa-icon [icon]="pdf"></fa-icon>
+      </button>
+
+    </div>
+  </div>
+
+
+
+  <div class="data-tabel  mt-4" *ngIf="expenses.length">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>المصروف</td>
+            <td>القيمة</td>
+            <td>التاريخ</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let expense of expenses ;let i = index">
+            <!-- <tr [hidden]="date != patient.date && date" (click)="openEditModal(i,patient)"> -->
+            <tr (click)="openEditModal(i,expense)">
+              <td>{{expense.expenses}}</td>
+              <td>{{expense.amount}}</td>
+              <td>{{expense.date | date:'d/M/yy'}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- modals -->
+<div *ngIf="modal.type" class="modal">
+  <!-- button to close modal -->
+  <button [@fade] (click)="resetModal()"></button>
+  <div [@uReveal]>
+    <!-- modal header -->
+    <div>
+      <h3>{{modal.type=='add'?'اضافة مصروف':modal.data.expenses}}</h3>
+      <button (click)="resetModal()">
+        <fa-icon [icon]="x_icon"></fa-icon>
+      </button>
+    </div>
+    <!-- modal data  -->
+    <form #addExpenses="ngForm">
+      <hr>
+
+
+      <div class="my-2" *ngIf="modal.data.total - modal.data.disscount - modal.data.pay">
+        <input type="checkbox" id="done" #done
+          (change)="done.value ? modal.data.pay = +modal.data.pay +  (+modal.data.total - +modal.data.disscount - +modal.data.pay):'' ">
+        <label class="px-3 cursor-pointer" for="done">خالص</label>
+      </div>
+      <div class="grid gap-2">
+        <div class="form-group flex-grow">
+          <label>المصروف</label>
+          <div>
+            <input #expenses="ngModel" ngModel name="expenses" [(ngModel)]="modal.data.expenses" type="text"
+              placeholder="المصروف">
+          </div>
+        </div>
+        <div class="form-group flex-grow">
+          <label>القيمة</label>
+          <div>
+            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              #amount="ngModel" ngModel name="amount" [(ngModel)]="modal.data.amount" type="text"
+              placeholder="المبلغ المدفوع">
+          </div>
+        </div>
+
+      </div>
+      <hr>
+      <div class="buttons">
+        <button class="btn" (click)="resetModal()">الرجوع</button>
+        <button class="btn primary" type="button" [disabled]="addExpenses.invalid"
+          (click)="modal.index === null ? add(addExpenses) : edit(modal.index,addExpenses)">
+          <span>حفظ</span>
+        </button>
+      </div>
+    </form>
+
+
+  </div>
+</div>

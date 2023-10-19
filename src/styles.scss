@@ -67,9 +67,6 @@
         }
       }
     }
-    ::selection {
-      @apply bg-orange-500 text-white;
-    }
   }
 }
 @layer utilities {
@@ -78,21 +75,39 @@
     @media (min-width: 768px) {
       max-width: 1200px;
     }
+    @media print {
+      max-width: unset;
+    }
   }
-  // .dark {
-  //   .bg-cyan-900 {
-  //     background-color: red !important;
-  //   }
-  // }
 }
 @layer components {
+  .scrollbar {
+    &::-webkit-scrollbar {
+      @apply h-3 bg-neutral-200 rounded-full w-2;
+    }
+    &::-webkit-scrollbar-button {
+      @apply hidden;
+    }
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-full bg-neutral-400 hover:bg-blue-400 active:bg-blue-900;
+    }
+  }
+  .header-btn {
+    @apply py-3 flex justify-center gap-2 text-xl font-medium;
+    button {
+      @apply p-2 rounded-lg;
+      &.active {
+        @apply bg-blue-50 text-blue-500;
+      }
+    }
+  }
   .btn {
-    @apply p-2 aspect-square flex items-center justify-center disabled:grayscale disabled:opacity-30 rounded-lg;
+    @apply p-2  flex items-center justify-center disabled:grayscale disabled:opacity-30 rounded-lg duration-300;
     &.primary {
-      @apply bg-blue-500 text-white;
+      @apply hover:bg-blue-500 bg-blue-50 text-blue-500 hover:text-white;
     }
     &.error {
-      @apply bg-red-500 text-white;
+      @apply hover:bg-red-500 bg-red-50 text-red-500  hover:text-white;
     }
   }
   .form-group {
@@ -143,44 +158,6 @@
     }
   }
 
-  .title {
-    @apply pt-24 text-center capitalize;
-    > h2 {
-      @apply relative text-3xl font-bold px-5 w-fit  mx-auto duration-300 cursor-pointer;
-      // &::after,
-      // &::before {
-      //   content: "";
-      //   background: url(assets/titleImg2.png) center center no-repeat;
-      //   filter: saturate(0.5);
-      //   @apply w-12 h-12 absolute top-1/2 -translate-y-1/2 bg-cover duration-300;
-      //   @media (max-width: 430px) {
-      //     @apply hidden;
-      //   }
-      // }
-      // &::after {
-      //   @apply left-full;
-      //   --tw-scale-x: -1;
-      // }
-      // &::before {
-      //   @apply right-full;
-      // }
-    }
-    p {
-      @apply py-2 text-zinc-400;
-    }
-    &:hover {
-      h2 {
-        @apply text-orange-500;
-        &::after,
-        &::before {
-          filter: saturate(1);
-        }
-      }
-    }
-  }
-  .shop-btn {
-    @apply py-2 px-5 bg-cyan-900 hover:bg-orange-400 text-white duration-300 uppercase;
-  }
   .checkBoxLable {
     @apply flex gap-2 items-center cursor-pointer select-none;
     > div {
@@ -368,5 +345,16 @@
         }
       }
     }
+  }
+}
+.in-print {
+  display: none;
+}
+@media print {
+  .no-print {
+    display: none;
+  }
+  .in-print {
+    display: block;
   }
 }

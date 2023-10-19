@@ -1,23 +1,55 @@
-<div class="py-3 flex justify-center gap-2 text-xl font-bold">
-  <button routerLink="/system">اضافة</button>
-  <button routerLink="/payments">الحسابات</button>
+<div class="header-btn no-print">
+  <button routerLink="/system" routerLinkActive="active">اضافة</button>
+  <button routerLink="/patients" routerLinkActive="active">المرضي</button>
+  <button routerLink="/payments" routerLinkActive="active">الحسابات</button>
+  <button routerLink="/expenses" routerLinkActive="active">المصروفات</button>
 </div>
-<div class="py-3 border-y my-2 px-4 flex items-end gap-2">
-  <div class="form-group">
-    <label>التاريخ</label>
-    <div>
-      <input type="date" placeholder="اختر التاريخ" name="date" [ngModel]="chosenDate"
-        (ngModelChange)="changeDate($event)">
+
+<div class="px-4 flex gap-4 flex-col items-center print:mb-3" *ngIf="patients.length">
+  تقرير عن المرضي من تاريخ
+  <div>
+    <ng-container *ngIf="!date">
+      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.from}}</span>
+      الى
+      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
+    </ng-container>
+    <ng-container *ngIf="date">
+
+      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
+    </ng-container>
+  </div>
+</div>
+
+<div class="no-print py-3  my-2 mx-4 items-end flex justify-between gap-2">
+  <div class="flex items-end gap-2">
+    <div class="form-group">
+      <label>التاريخ</label>
+      <div>
+        <input type="date" placeholder="اختر التاريخ" name="date" [ngModel]="chosenDate"
+          (ngModelChange)="changeDate($event)">
+      </div>
+    </div>
+    <button *ngIf="date" (click)="date=null" class="btn primary aspect-auto">
+      حذف الفلتره
+    </button>
+    <div *ngIf="date" class="p-2 bg-orange-100 rounded-lg">
+      عرض النتائج الخاصة بيوم {{date}}
     </div>
   </div>
-  <button *ngIf="date" (click)="date=null" class="btn primary aspect-auto">
-    حذف الفلتره
-  </button>
-  <div *ngIf="date" class="p-2 bg-orange-100 rounded-lg">
-    عرض النتائج الخاصة بيوم {{date}}
+  <div class="flex gap-2">
+    <button (click)="generateExcel()" class="btn primary flex gap-2 items-center">
+      <span>Excel</span>
+      <fa-icon [icon]="excel"></fa-icon>
+    </button>
+    <button (click)="print()" class="btn primary flex gap-2 items-center">
+      <span>PDF</span>
+      <fa-icon [icon]="pdf"></fa-icon>
+    </button>
+
   </div>
 </div>
-<div class="data-tabel px-4">
+
+<div class="data-tabel px-4" *ngIf="patients.length">
   <div>
     <table>
       <thead>
@@ -29,12 +61,13 @@
           <td>خصم</td>
           <td>مدفوع</td>
           <td>باقي</td>
+          <td>التاريخ</td>
           <td>التحاليل المطلوبه</td>
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let patient of patients">
-          <tr [hidden]="date != patient.date && date">
+        <ng-container *ngFor="let patient of patients ;let i = index">
+          <tr [hidden]="date != patient.date && date" (click)="openEditModal(i,patient)">
             <td>{{patient.name}}</td>
             <td>{{patient.age}}</td>
             <td>{{patient.doctorName}}</td>
@@ -48,8 +81,11 @@
               </span>
             </td>
             <td>
+              {{patient.date | date:'d/M/yy'}}
+            </td>
+            <td>
               <ng-container *ngFor="let test of patient.tests">
-                <span>
+                <span class="text-xs">
                   {{test.name}}
                 </span>
                 <br>
@@ -64,6 +100,10 @@
   </div>
 </div>
 
+<div *ngIf="!patients.length" class="p-3  mx-4 text-center rounded-lg bg-blue-50">
+  لم تتم اضافة اي مريض
+</div>
+
 <!-- modals -->
 <div *ngIf="modal.type" class="modal">
   <!-- button to close modal -->
@@ -71,221 +111,196 @@
   <div [@uReveal]>
     <!-- modal header -->
     <div>
-      <h3>تعديل المريض</h3>
+      <h3>{{modal.data.name}}</h3>
       <button (click)="resetModal()">
-        <img src="assets/icons/x-mark-b.svg" alt="close icon">
+        <fa-icon [icon]="x_icon"></fa-icon>
       </button>
     </div>
-
-
     <!-- modal data  -->
-    <!-- add budget and edit -->
-    <form #addBudgetForm="ngForm" *ngIf="modal.type == 'addBudget' || modal.type == 'editBudget'">
+    <form *ngIf="modal.type == 'edit'" #editPetient="ngForm">
       <hr>
 
-      <ng-container *ngIf="modal?.data?.status || !modal?.data?.uuid ">
-        <div class="two-col">
-          <div class="form-group required">
-            <label for="budgetName">إسم المريض <span>( عربى ) </span></label>
-            <div>
-              <input type="text" id="budgetName" name="budgetName" #budgetName="ngModel"
-                [(ngModel)]="modal.data.name.ar" required
-                (keypress)="formStatus.errors?.budgetName ? formStatus.errors.budgetName = null:''"
-                placeholder="ادخل اسم الباقة">
-            </div>
-            <p>
-              <span *ngIf="budgetName.touched && !formStatus.errors?.budgetName">
-                <span *ngIf="budgetName.errors?.['required']">هذا الحقل مطلوب</span>
-              </span>
-              <span *ngIf="formStatus.errors?.['name.ar']">{{formStatus.errors?.['name.ar'][0]}}</span>
-            </p>
-          </div>
-          <div class="form-group required">
-            <label for="budgetNameEn">إسم الباقة <span>( انجليزى ) </span></label>
-            <div>
-              <input type="text" id="budgetNameEn" name="budgetNameEn" [(ngModel)]="modal.data.name.en"
-                #budgetNameEn="ngModel" ngModel required
-                (keypress)="formStatus.errors?.budgetNameEn ? formStatus.errors.budgetNameEn = null:''"
-                placeholder="ادخل اسم الباقة">
-            </div>
-            <p>
-              <span *ngIf="budgetNameEn.touched && !formStatus.errors?.budgetNameEn">
-                <span *ngIf="budgetNameEn.errors?.['required']">هذا الحقل مطلوب</span>
-              </span>
-              <span *ngIf="formStatus.errors?.['name.en']">{{formStatus.errors?.['name.en'][0]}}</span>
 
-            </p>
-          </div>
-          <div class="form-group required">
-            <label for="budgetDiscription">وصف الباقة <span>( عربى ) </span></label>
-            <div>
-              <input type="text" id="budgetDiscription" name="budgetDiscription" #budgetDiscription="ngModel"
-                [(ngModel)]="modal.data.description.ar" required
-                (keypress)="formStatus.errors?.budgetDiscription ? formStatus.errors.budgetDiscription = null:''"
-                placeholder="ادخل اسم الباقة">
-            </div>
-            <p>
-              <span *ngIf="budgetDiscription.touched && !formStatus.errors?.budgetDiscription">
-                <span *ngIf="budgetDiscription.errors?.['required']">هذا الحقل مطلوب</span>
-              </span>
-              <span *ngIf="formStatus.errors?.['description.ar']">{{formStatus.errors?.['description.ar'][0]}}</span>
-
-            </p>
-          </div>
-          <div class="form-group required">
-            <label for="budgetDiscriptionEn">وصف الباقة <span>( انجليزى ) </span></label>
-            <div>
-              <input type="text" id="budgetDiscriptionEn" name="budgetDiscriptionEn" #budgetDiscriptionEn="ngModel"
-                [(ngModel)]="modal.data.description.en" required
-                (keypress)="formStatus.errors?.budgetDiscriptionEn ? formStatus.errors.budgetDiscriptionEn = null:''"
-                placeholder="ادخل اسم الباقة">
-            </div>
-            <p>
-              <span *ngIf="budgetDiscriptionEn.touched && !formStatus.errors?.budgetDiscriptionEn">
-                <span *ngIf="budgetDiscriptionEn.errors?.['required']">هذا الحقل مطلوب</span>
-              </span>
-              <span *ngIf="formStatus.errors?.['description.en']">{{formStatus.errors?.['description.en'][0]}}</span>
-
-            </p>
-          </div>
-          <div class="form-group required">
-            <label for="price">السعر <span>( بالريال )</span> </label>
-            <div>
-              <input type="text" id="price" name="price" #price="ngModel" [(ngModel)]="modal.data.price" required
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                (keypress)="formStatus.errors?.price ? formStatus.errors.price = null:''"
-                placeholder="حدد قيمة مناسبة للباقة">
-            </div>
-            <p>
-              <span *ngIf="price.touched && !formStatus.errors?.price">
-                <span *ngIf="price.errors?.['required']">هذا الحقل مطلوب</span>
-              </span>
-              <span *ngIf="formStatus.errors?.price">{{formStatus.errors?.price}}</span>
-            </p>
-          </div>
-        </div>
-        <div>
-          <label class="my-1" [(ngModel)]="modal.data.best_choice" nz-checkbox ngModel #best_choice='ngModel'
-            name="best_choice">افضل
-            اختيار</label>
-        </div>
-        <label class="my-1" [(ngModel)]="modal.data.newable" nz-checkbox ngModel #newable='ngModel' name="newable">متاح
-          للعملاء
-          الجدد</label>
-      </ng-container>
-      <hr>
-      <div class="buttons">
-        <button class="btn" (click)="resetModal()">الرجوع</button>
-        <button *ngIf="modal.type == 'addBudget'" class="btn success relative overflow-hidden"
-          [disabled]="addBudgetForm.invalid" (click)="addBudget(addBudgetForm)">
-          <span>إضافة الباقة</span>
-          <span class="loading bg-success-500" *ngIf="formStatus.loading">
-            <span></span>
-          </span>
-        </button>
-        <button *ngIf="modal.type == 'editBudget'" class="btn success relative overflow-hidden"
-          [disabled]="addBudgetForm.invalid" (click)="editBudget()">
-          <span>تعديل</span>
-          <span class="loading bg-success-500" *ngIf="formStatus.loading">
-            <span></span>
-          </span>
-        </button>
+      <div class="my-2" *ngIf="modal.data.total - modal.data.disscount - modal.data.pay">
+        <input type="checkbox" id="done" #done
+          (change)="done.value ? modal.data.pay = +modal.data.pay +  (+modal.data.total - +modal.data.disscount - +modal.data.pay):'' ">
+        <label class="px-3 cursor-pointer" for="done">خالص</label>
       </div>
-    </form>
-    <!-- edit budget -->
-    <form #addService="ngForm" *ngIf="modal.type == 'addBudgetService'">
-      <hr>
-      <div class="grid sm:grid-cols-2 gap-2 items-center">
-        <div class="form-group required flex-grow">
-          <label for="name">اسم الخدمة </label>
-          <nz-select id="name" name="feature" [(ngModel)]="tempData.feature" #feature="ngModel" ngModel required
-            [nzShowArrow]="false" nzPlaceHolder="إختر الخدمة">
-            <nz-option [nzDisabled]="isDublicated(tempFeatures,feature) " *ngFor="let feature of selectData.features"
-              [nzValue]="feature" nzLabel="{{feature.name}}"></nz-option>
-          </nz-select>
-          <p>
-            <span *ngIf="feature.touched && !formStatus.errors?.feature">
-              <span *ngIf="feature.errors?.['required']">هذا الحقل مطلوب</span>
-            </span>
-            <span *ngIf="formStatus.errors?.feature">{{formStatus.errors?.feature}}</span>
-          </p>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="form-group flex-grow">
+          <label>مدفوع</label>
+          <div>
+            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              #pay="ngModel" ngModel name="pay" [(ngModel)]="modal.data.pay" type="text" placeholder="المبلغ المدفوع">
+          </div>
         </div>
         <div class="form-group flex-grow">
-          <label for="extra_price">السعر الإضافى <span>( بالريال )</span> </label>
+          <label>الخصم</label>
           <div>
-            <input [(ngModel)]="tempData.extra_price" type="extra_price" id="extra_price" name="extra_price"
-              #extra_price="ngModel" ngModel
-              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-              (keypress)="formStatus.errors?.extra_price ? formStatus.errors.extra_price = null:''"
-              placeholder="حدد سعر مناسب للخدمة">
+            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              #disscount="ngModel" ngModel name="disscount" type="text" [(ngModel)]="modal.data.disscount"
+              placeholder="الخصم">
           </div>
-          <p>
-            <span *ngIf="formStatus.errors?.extra_price">{{formStatus.errors?.extra_price}}</span>
-          </p>
         </div>
         <div class="form-group flex-grow">
-          <label for="counter">التكرار </label>
+          <label>الباقي</label>
           <div>
-            <input [(ngModel)]="tempData.counter" type="counter" id="counter" name="counter" #counter="ngModel" ngModel
-              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-              (keypress)="formStatus.errors?.counter ? formStatus.errors.counter = null:''"
-              placeholder="حدد عدد مرات التكرار">
+            <input readonly [value]="modal.data.total - modal.data.disscount - modal.data.pay" type="text">
           </div>
-          <p>
-            <span *ngIf="formStatus.errors?.counter">{{formStatus.errors?.counter}}</span>
-          </p>
         </div>
-        <button type="button" class="btn success w-fit mt-2" (click)="addFeatures(addService)"
-          [disabled]="!tempData.feature">
-          اضافة المزيد
-        </button>
       </div>
-      <div class="data-tabel" *ngIf="tempFeatures.length">
-        <div class="max-h-96">
-          <table class="custom-table retm-card">
+
+      <div class="data-tabel mt-4 w-full " *ngIf="modal.data.tests.length">
+
+        <div class="max-h-80">
+          <table>
             <thead>
               <tr>
-                <th>اسم الخدمة</th>
-                <th>القيمة</th>
-                <th>التكرار</th>
-                <th>خيارات</th>
+                <td class="w-100">التحليل</td>
+                <td>السعر ({{modal.data.total}})</td>
+                <td>
+                  حذف
+                </td>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let feature of tempFeatures ;let i = index">
-                <td>{{feature?.feature?.name ||feature?.name }}</td>
-                <td>{{feature.extra_price || 0}}</td>
-                <td>{{feature.counter || 0}}</td>
+
+              <tr *ngFor="let test of modal.data.tests;let l =index">
+                <td>{{test.name}}</td>
+                <td>{{test.price}}</td>
                 <td>
-                  <div class="flex gap-2">
-                    <button (click)="editFeatures(feature,i)"
-                      class="py-1 px-2 hover:text-white bg-warning-50 hover:bg-warning-400 rounded-lg duration-300">
-                      تعديل
-                    </button>
-                    <button (click)="tempFeatures.splice(i,1)"
-                      class="py-1 px-2 hover:text-white bg-error-50 hover:bg-error-400 rounded-lg duration-300">
-                      حذف
-                    </button>
-                  </div>
+                  <button (click)="remove(l)" class="btn error">
+                    <fa-icon [icon]="deleteIcon"></fa-icon>
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
+
+        </div>
+      </div>
+
+
+      <hr>
+      <div class="buttons">
+        <button class="btn" (click)="resetModal()">الرجوع</button>
+        <div class="flex gap-2">
+          <button type="button " class="btn text-red-500" (click)=" modal.type='delete'">
+            <span>حذف</span>
+          </button>
+          <button type="button" class="btn text-blue-500" (click)=" modal.type='add'">
+            <span>اضافة تحاليل</span>
+          </button>
+          <button class="btn primary" type="button" [disabled]="editPetient.invalid" (click)="edit()">
+            <span>حفظ</span>
+          </button>
+
+        </div>
+      </div>
+    </form>
+    <form *ngIf="modal.type == 'add'" #addTests="ngForm">
+
+      <ng-container *ngIf="modal.data.tests.length">
+        <div class="data-tabel mt-3">
+
+          <div class="max-h-44">
+            <table>
+              <thead>
+                <tr>
+                  <td>التحليل</td>
+                  <td>السعر ({{modal.data.total}})</td>
+                  <td> حذف</td>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let req of modal.data.tests;let i =index">
+                  <td>{{req.name}}</td>
+                  <td>{{req.price}}</td>
+                  <td>
+                    <button (click)="remove(i)" class="btn error">
+                      <fa-icon [icon]="deleteIcon"></fa-icon>
+                    </button>
+                  </td>
+                </tr>
+
+
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+      </ng-container>
+      <form #loginForm="ngForm" class="flex gap-2 flex-wrap py-2 border-y my-2">
+        <div class="form-group flex-grow">
+          <label for="code">كود التحليل</label>
+          <div>
+            <input id="code" type="text" placeholder="كود التحليل" [(ngModel)]="searchCode"
+              (ngModelChange)="searchName = ''" name="code" (keydown)="addWithEnter($event,searchCode,'code')">
+          </div>
+        </div>
+        <div class="form-group flex-grow">
+          <label for="Name">اسم التحليل</label>
+          <div>
+            <input id="Name" type="text" placeholder="اسم التحليل" (keydown)="addWithEnter($event,searchName,'name')"
+              [ngModel]="searchName | lowercase" (ngModelChange)="searchName = $event ; searchCode = ''" name="name">
+          </div>
+        </div>
+      </form>
+
+
+      <div class="data-tabel">
+        <div class="max-h-48">
+          <table>
+            <thead>
+              <tr>
+                <td style="width: 100%;">التحليل</td>
+                <td>السعر</td>
+                <td>اضافة</td>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let test of tests">
+                <tr
+                  [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
+                  <td class="w-32">{{test.name}}</td>
+                  <td>{{test.price}}</td>
+                  <td>
+                    <button class="primary btn" (click)="add(test)" [disabled]="isDublicate(test,modal.data.tests)">
+                      <fa-icon [icon]="addIcon"></fa-icon>
+                    </button>
+                  </td>
+                </tr>
+
+              </ng-container>
+            </tbody>
+          </table>
+
         </div>
       </div>
       <hr>
       <div class="buttons">
-        <button class="btn" (click)="resetModal()">الرجوع</button>
-        <button class="btn success relative overflow-hidden" [disabled]="addService.invalid && !tempFeatures.length"
-          (click)="attachFeature(addService)">
-          <span>إضافة الخدمة</span>
-          <span class="loading bg-success-500" *ngIf="formStatus.loading">
-            <span></span>
-          </span>
-        </button>
+        <button class="btn" type="button" (click)="modal.type='edit'">عوده</button>
+        <div class="flex gap-2">
+          <button class="btn primary" (click)="edit()">
+            <span>حفظ</span>
+          </button>
+        </div>
       </div>
     </form>
+    <form *ngIf="modal.type == 'delete'" #addTests="ngForm">
 
-
+      <span class="text-xl text-red font-bold block mt-3 text-red-500"> هل تريد بالتاكيد حذف الزيارة</span>
+      <hr>
+      <div class="buttons">
+        <button class="btn" type="button" (click)="modal.type='edit'">عوده</button>
+        <div class="flex gap-2">
+          <button class="btn error" (click)="delete()">
+            <span>حذف</span>
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
