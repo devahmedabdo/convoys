@@ -26,6 +26,7 @@
     "lord-icon-element": "^4.0.3",
     "lottie-web": "^5.10.2",
     "ngx-image-cropper": "^6.3.2",
+    "ngx-modal-dialog": "^4.0.0",
     "rxjs": "~7.5.0",
     "swiper": "^8.4.4",
     "tailwindcss": "^3.2.2",

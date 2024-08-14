@@ -1,0 +1,20 @@
+<header class="px-3 md:px-9 py-5 flex justify-between items-center bg-white border-neutral-200 relative">
+  <img class="w-20" src="assets/logo.png" alt="logo">
+  <div class="flex  menu duration-300" [ngClass]="{active:activeMenu}">
+    <nav class="flex gap-4">
+      <ng-container *ngFor="let link of links;let i =index">
+        <a routerLink="/{{link.link}}" [style]="'--d:'+i" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:link.link=='' ? true : false }">
+          {{link.name}}
+        </a>
+      </ng-container>
+    </nav>
+  </div>
+
+  <div class="menu-icon w-8 flex flex-col  gap-2 items-end justify-center cursor-pointer"
+    [ngClass]="{active:activeMenu}" (click)="reflectActiveMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</header>

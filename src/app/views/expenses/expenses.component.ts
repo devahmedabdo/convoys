@@ -17,6 +17,31 @@ import * as XLSX from 'xlsx';
 export class ExpensesComponent implements OnInit {
   constructor() {}
 
+  download(name: any) {
+    let text = localStorage.getItem(name) || '';
+    let blob = new Blob([text], { type: 'text' });
+    let a = document.createElement('a');
+    a.download = 'Errors';
+    a.href = URL.createObjectURL(blob);
+    a.dataset['downloadurl'] = ['text', a.download, a.href].join(':');
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () {
+      URL.revokeObjectURL(a.href);
+    }, 1500);
+  }
+  openFile(event: any) {
+    let input = event.target;
+    let reader = new FileReader();
+    reader.onload = () => {
+      let text = reader.result;
+      // let data = this.storage.decryptData(text, 'RetmPos6');
+      // this.errors = data;
+    };
+    reader.readAsText(input.files[0]);
+  }
   ngOnInit(): void {
     this.expenses = this.get('expenses');
   }

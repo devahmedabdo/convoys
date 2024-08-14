@@ -1,0 +1,95 @@
+<div class="container flex flex-col gap-4">
+  <form #loginForm="ngForm" class="flex gap-2 flex-wrap mt-2">
+    <div class="form-group flex-grow">
+      <label for="code">كود التحليل</label>
+      <div>
+        <input id="code" type="text" placeholder="كود التحليل" [(ngModel)]="searchCode"
+          (ngModelChange)="searchName = ''" name="code">
+      </div>
+    </div>
+    <div class="form-group flex-grow">
+      <label for="Name">اسم التحليل</label>
+      <div>
+        <input id="Name" type="text" placeholder="اسم التحليل" [ngModel]="searchName | lowercase"
+          (ngModelChange)="searchName = $event ; searchCode = ''" name="name">
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div class="data-tabel">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>التحليل</td>
+            <td>سعر المعمل</td>
+            <td>سعر المريض</td>
+            <td>التيم</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let test of tests;let i=index">
+            <tr (click)="openSimpleModal(test,i)"
+              [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
+              <td>{{test.name}}</td>
+              <td>{{test.price}}</td>
+              <td>{{test?.patient}}</td>
+              <td>{{test?.team}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-open fixed top-0 left-0 h-screen flex justify-center items-center w-full" *ngIf="modal">
+  <button class="absolute bg-black bg-opacity-30 -z-10 top-0 w-full h-full left-0" @fade (click)="modal=null"></button>
+  <div class="flex bg-white rounded-lg flex-col gap-4 p-6 w-[500px] max-w-full" @uReveal>
+    <div class="flex justify-between items-center">
+      <h3 class="text-2xl font-bold">بيانات التحليل</h3>
+      <button class="btn error aspect-square" (click)="modal=null">
+        <fa-icon [icon]="['fas','close']"></fa-icon>
+      </button>
+    </div>
+    <!-- body -->
+    <div class="grid md:grid-cols-2 gap-3 ">
+      <div class="form-group flex-grow">
+        <label>اسم التحليل</label>
+        <div>
+          <input #name="ngModel" [(ngModel)]="modal.name" name="name" type="text" placeholder=".....">
+        </div>
+      </div>
+      <div class="form-group flex-grow">
+        <label>سعر المعمل</label>
+        <div>
+          <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+            #price="ngModel" [(ngModel)]="modal.price" name="price" type="text" placeholder="0">
+        </div>
+      </div>
+      <div class="form-group flex-grow">
+        <label>سعر المريض</label>
+        <div>
+          <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+            #patient="ngModel" [(ngModel)]="modal.patient" name="patient" type="text" placeholder="0">
+        </div>
+      </div>
+      <div class="form-group flex-grow">
+        <label>التيم</label>
+        <div>
+          <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+            #team="ngModel" [(ngModel)]="modal.team" name="team" type="text" placeholder="0">
+        </div>
+      </div>
+    </div>
+    <!-- footer -->
+    <div class="flex justify-between items-center pt-2 border-t">
+      <button class="btn" (click)="modal=null">
+        تراجع
+      </button>
+      <button class="btn primary" (click)="save()">
+        حفظ
+      </button>
+    </div>
+  </div>
+</div>

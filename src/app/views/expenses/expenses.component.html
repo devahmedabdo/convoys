@@ -1,16 +1,10 @@
-<div class="header-btn no-print ">
-  <button routerLink="/system" routerLinkActive="active">اضافة</button>
-  <button routerLink="/patients" routerLinkActive="active">المرضي</button>
-  <button routerLink="/payments" routerLinkActive="active">الحسابات</button>
-  <button routerLink="/expenses" routerLinkActive="active">المصروفات</button>
-</div>
-
 <div class="container px-4">
 
 
   <div class="no-print py-3 border-t my-2 mx-4 items-end flex justify-between gap-2">
     <div>
-      <button (click)="modal.type = 'add'" class="btn primary">اضافة مصروف</button>
+      <button (click)="modal.type = 'add'" class="btn primary">اضافة قائمة اسعار</button>
+      <input type="file" (change)="openFile($event)">
     </div>
 
     <div class="flex gap-2">
