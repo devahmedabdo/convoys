@@ -21,8 +21,8 @@ export class HeaderComponent implements OnInit {
       link: '/payments',
     },
     {
-      name: 'المصروفات',
-      link: '/expenses',
+      name: 'الاعدادات',
+      link: '/setting',
     },
     {
       name: 'قائمة الاسعار',

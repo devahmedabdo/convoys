@@ -32,63 +32,38 @@ export class PaymentsComponent implements OnInit {
   expenses: any[] = [];
   mony: any = {
     total: 0,
-    expenses: 0,
-    exist: 0,
+    lab: 0,
+    team: 0,
     depit: 0,
   };
-  findMinAndMax(array: any[]) {
-    if (array.length === 0) {
-      return { min: undefined, max: undefined };
-    }
 
-    let min: any = new Date(array[0].date).getTime();
-    let max: any = new Date(array[0].date).getTime();
-
-    for (let i = 1; i < array.length; i++) {
-      if (new Date(array[i].date).getTime() < min) {
-        min = new Date(array[i].date).getTime();
-      }
-      if (new Date(array[i].date).getTime() > max) {
-        max = new Date(array[i].date).getTime();
-      }
-    }
-
-    return { min, max };
-  }
-  reportDate: any = {
-    from: null,
-    to: null,
-  };
   getData() {
     this.patients = this.get('patients');
-    if (this.patients.length) {
-      let date = this.findMinAndMax(this.patients);
-      this.reportDate.from = new Date(date.min).toDateString();
-      this.reportDate.to = new Date(date.max).toDateString();
-    }
-    this.expenses = this.get('expenses');
+    console.log(this.patients);
     let allDept = 0;
     let totalPrice = 0;
-    let totaExpenses = 0;
+    let teamPercentage = 0;
+    let labPercentage = 0;
     this.patients.forEach((patient: any) => {
       let left = +patient.total - +patient.pay - +patient.disscount;
       totalPrice += patient.total - left - +patient.disscount;
       if (left) {
         this.deptPatients.push(patient);
         allDept += left;
+      } else {
+        patient.tests.forEach((test: any) => {
+          teamPercentage += +test.team || 0;
+          labPercentage += +test.price - (+test.team || 0) - patient.disscount;
+        });
       }
-    });
-    this.expenses.forEach((expense: any) => {
-      totaExpenses += +expense.amount;
     });
 
     this.mony = {
       total: totalPrice,
-      expenses: totaExpenses,
-      exist: totalPrice - totaExpenses,
+      lab: labPercentage,
+      team: teamPercentage,
       depit: allDept,
     };
-    this.deptPatients;
   }
 
   deleteIcon = faTrashCan;

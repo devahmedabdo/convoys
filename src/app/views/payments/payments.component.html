@@ -6,26 +6,19 @@
     </button>
   </div>
 
-  <div class="px-4 flex gap-4 flex-col items-center mb-5" *ngIf="patients.length">
-    تقرير عن الحسابات من تاريخ
-    <div>
-      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.from}}</span>
-      الى
-      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
-    </div>
-  </div>
+
   <div class="px-2 font-bold grid grid-cols-4  gap-4 text-lg justify-center justify-items-center">
     <div class="flex gap-3 items-center p-4 flex-col-reverse marker">
-      <span>ايرادات المعمل</span>
+      <span>ايرادات القافلة</span>
       <span class="">{{mony.total}}</span>
     </div>
     <div class="flex gap-3 items-center p-4 flex-col-reverse marker warning">
-      <span>المصروفات</span>
-      <span class="  ">{{mony.expenses}}</span>
+      <span>حساب المعمل</span>
+      <span class="  ">{{mony.lab}}</span>
     </div>
     <div class="flex gap-3 items-center p-4 flex-col-reverse marker primary">
-      <span>صافى النقدية</span>
-      <span class="   ">{{mony.exist}}</span>
+      <span>حساب الفريق</span>
+      <span class="   ">{{mony.team}}</span>
     </div>
     <div class="flex gap-3 items-center p-4 flex-col-reverse marker error">
       <span>اجمالى المديونية</span>
@@ -39,6 +32,7 @@
         <table>
           <thead>
             <tr>
+              <td>الكود</td>
               <td>اسم المريض</td>
               <!-- <td>السن</td>
               <td>الطبيب</td> -->
@@ -46,13 +40,14 @@
               <td>خصم</td>
               <td>مدفوع</td>
               <td>باقي</td>
-              <td>التاريخ</td>
+              <!-- <td>التاريخ</td> -->
               <!-- <td>التحاليل المطلوبه</td> -->
             </tr>
           </thead>
           <tbody>
             <ng-container *ngFor="let patient of deptPatients ;let i = index">
               <tr>
+                <td>{{patient.code}}</td>
                 <td>{{patient.name}}</td>
                 <!-- <td>{{patient.age}}</td>
                 <td>{{patient.doctorName}}</td> -->
@@ -65,9 +60,9 @@
                     {{patient.total - patient.pay - patient.disscount}}
                   </span>
                 </td>
-                <td>
+                <!-- <td>
                   {{patient.date | date:'shortDate'}}
-                </td>
+                </td> -->
                 <!-- <td>
                   <ng-container *ngFor="let test of patient.tests">
                     <span>

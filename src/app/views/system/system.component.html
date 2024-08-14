@@ -1,4 +1,4 @@
-<div class="max-w-[1300px] mx-auto pt-3" dir="rtl">
+<div class="container mx-auto pt-3" dir="rtl">
   <form #addPatient="ngForm" class="flex gap-2 flex-wrap items-end">
     <div class="form-group flex-grow">
       <label>الاسم</label>
@@ -14,9 +14,9 @@
       </div>
     </div>
     <div class="form-group flex-grow">
-      <label>الطبيب</label>
+      <label>رقم موبايل</label>
       <div>
-        <input #doctorName="ngModel" ngModel name="doctorName" type="text" placeholder="اسم الطبيب">
+        <input #phone="ngModel" ngModel name="phone" type="text" placeholder="رقم موبايل">
       </div>
     </div>
     <div class="form-group flex-grow">
@@ -31,12 +31,6 @@
       <div>
         <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
           #disscount="ngModel" ngModel name="disscount" type="text" placeholder="الخصم">
-      </div>
-    </div>
-    <div class="form-group flex-grow">
-      <label>الباقي</label>
-      <div>
-        <input readonly [value]="+total -  pay.value - disscount.value" type="text" placeholder="الباقي">
       </div>
     </div>
     <button class="btn primary leading-3 w-10" (click)="savePatient(addPatient)"

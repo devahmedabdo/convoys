@@ -11,6 +11,7 @@ export class PriceListComponent implements OnInit {
   constructor() {
     this.tests =
       JSON.parse(localStorage.getItem('priceList') || 'null') || this.default;
+    localStorage.setItem('priceList', JSON.stringify(this.tests));
   }
   openSimpleModal(test: any, index: number) {
     this.modal = JSON.parse(JSON.stringify(test));

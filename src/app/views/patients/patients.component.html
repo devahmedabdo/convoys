@@ -1,102 +1,92 @@
-<div class="px-4 flex gap-4 flex-col items-center print:mb-3" *ngIf="patients.length">
-  تقرير عن المرضي من تاريخ
-  <div>
-    <ng-container *ngIf="!date">
-      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.from}}</span>
-      الى
-      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
-    </ng-container>
-    <ng-container *ngIf="date">
-
-      <span class="bg-blue-50 rounded-lg p-2 text-blue-500">{{reportDate.to}}</span>
-    </ng-container>
+<div class="container">
+  <div class="no-print py-3  my-2 mx-4 items-end flex justify-end gap-2">
+    <div class="flex gap-2">
+      <button (click)="generateExcel()" class="btn primary flex gap-2 items-center">
+        <span>Excel</span>
+        <fa-icon [icon]="excel"></fa-icon>
+      </button>
+      <button (click)="print()" class="btn primary flex gap-2 items-center">
+        <span>PDF</span>
+        <fa-icon [icon]="pdf"></fa-icon>
+      </button>
+    </div>
   </div>
-</div>
 
-<div class="no-print py-3  my-2 mx-4 items-end flex justify-between gap-2">
-  <div class="flex items-end gap-2">
-    <div class="form-group">
-      <label>التاريخ</label>
+  <form *ngIf="patients.length" #loginForm="ngForm" class="flex gap-2 no-print flex-wrap my-4 px-4">
+    <div class="form-group flex-grow">
+      <label for="code">كود المريض</label>
       <div>
-        <input type="date" placeholder="اختر التاريخ" name="date" [ngModel]="chosenDate"
-          (ngModelChange)="changeDate($event)">
+        <input id="code" type="text" placeholder="كود المريض" [(ngModel)]="searchCode" (ngModelChange)="searchName = ''"
+          name="code">
       </div>
     </div>
-    <button *ngIf="date" (click)="date=null" class="btn primary aspect-auto">
-      حذف الفلتره
-    </button>
-    <div *ngIf="date" class="p-2 bg-orange-100 rounded-lg">
-      عرض النتائج الخاصة بيوم {{date}}
+    <div class="form-group flex-grow">
+      <label for="Name">اسم المريض</label>
+      <div>
+        <input id="Name" type="text" placeholder="اسم المريض" [ngModel]="searchName"
+          (ngModelChange)="searchName = $event ; searchCode = ''" name="name">
+      </div>
+    </div>
+  </form>
+
+  <div class="data-tabel px-4" *ngIf="patients.length">
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td>الكود</td>
+            <td>اسم المريض</td>
+            <td class="no-print">اجمالى الحساب</td>
+            <td>مدفوع</td>
+            <td>باقي</td>
+            <td>التحاليل المطلوبه</td>
+            <td>الحالة</td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let patient of patients ;let i = index">
+            <tr (click)="openEditModal(i,patient)"
+              [hidden]="(searchCode != patient.code && searchCode != '' && searchName == '' ) || ( !patient.name.includes(searchName)  && searchName != '' && searchCode == '' )">
+              <td>{{patient.code}}</td>
+              <td>
+                {{patient.name}}
+                {{patient?.phone}}
+
+              </td>
+              <td class="no-print">{{patient.total}}</td>
+              <td>{{patient.pay}}</td>
+              <td>
+                <span
+                  class="p-1 px-2 rounded-lg {{(patient.total - patient.pay - patient.disscount) ? 'text-red-500 bg-red-100':''}}">
+                  {{patient.total - patient.pay - patient.disscount}}
+                </span>
+              </td>
+              <td class="text-xs">
+                <ng-container *ngFor="let test of patient.tests">
+                  {{test.name}}
+                  <br>
+                </ng-container>
+              </td>
+              <td>
+                <span
+                  class="p-1 rounded-md text-xs {{patient.done ? 'bg-green-200 text-green-800':'bg-red-200 text-red-800'}}">
+                  {{patient.done ? 'مستلم':'لم يستلم'}}
+                </span>
+              </td>
+            </tr>
+
+          </ng-container>
+        </tbody>
+      </table>
+
     </div>
   </div>
-  <div class="flex gap-2">
-    <button (click)="generateExcel()" class="btn primary flex gap-2 items-center">
-      <span>Excel</span>
-      <fa-icon [icon]="excel"></fa-icon>
-    </button>
-    <button (click)="print()" class="btn primary flex gap-2 items-center">
-      <span>PDF</span>
-      <fa-icon [icon]="pdf"></fa-icon>
-    </button>
 
+  <div *ngIf="!patients.length" class="p-3  mx-4 text-center rounded-lg bg-blue-50">
+    لم تتم اضافة اي مريض
   </div>
+
 </div>
-
-<div class="data-tabel px-4" *ngIf="patients.length">
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <td>اسم المريض</td>
-          <td>السن</td>
-          <td>الطبيب</td>
-          <td>اجمالى الحساب</td>
-          <td>خصم</td>
-          <td>مدفوع</td>
-          <td>باقي</td>
-          <td>التاريخ</td>
-          <td>التحاليل المطلوبه</td>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let patient of patients ;let i = index">
-          <tr [hidden]="date != patient.date && date" (click)="openEditModal(i,patient)">
-            <td>{{patient.name}}</td>
-            <td>{{patient.age}}</td>
-            <td>{{patient.doctorName}}</td>
-            <td>{{patient.total}}</td>
-            <td>{{patient.disscount}}</td>
-            <td>{{patient.pay}}</td>
-            <td>
-              <span
-                class="p-1 px-2 rounded-lg {{(patient.total - patient.pay - patient.disscount) ? 'text-red-500 bg-red-100':''}}">
-                {{patient.total - patient.pay - patient.disscount}}
-              </span>
-            </td>
-            <td>
-              {{patient.date | date:'d/M/yy'}}
-            </td>
-            <td>
-              <ng-container *ngFor="let test of patient.tests">
-                <span class="text-xs">
-                  {{test.name}}
-                </span>
-                <br>
-              </ng-container>
-            </td>
-          </tr>
-
-        </ng-container>
-      </tbody>
-    </table>
-
-  </div>
-</div>
-
-<div *ngIf="!patients.length" class="p-3  mx-4 text-center rounded-lg bg-blue-50">
-  لم تتم اضافة اي مريض
-</div>
-
 <!-- modals -->
 <div *ngIf="modal.type" class="modal">
   <!-- button to close modal -->
@@ -115,9 +105,9 @@
 
 
       <div class="my-2" *ngIf="modal.data.total - modal.data.disscount - modal.data.pay">
-        <input type="checkbox" id="done" #done
+        <input type="checkbox" id="paided" #done
           (change)="done.value ? modal.data.pay = +modal.data.pay +  (+modal.data.total - +modal.data.disscount - +modal.data.pay):'' ">
-        <label class="px-3 cursor-pointer" for="done">خالص</label>
+        <label class="px-3 cursor-pointer" for="paided">خالص</label>
       </div>
       <div class="grid grid-cols-3 gap-2">
         <div class="form-group flex-grow">
@@ -140,6 +130,10 @@
           <div>
             <input readonly [value]="modal.data.total - modal.data.disscount - modal.data.pay" type="text">
           </div>
+        </div>
+        <div class="col-span-3 flex items-center gap-2">
+          <input type="checkbox" id="done" [(ngModel)]="modal.data.done" name="done" #done="ngModel">
+          <label for="done">تم الاستلام</label>
         </div>
       </div>
 

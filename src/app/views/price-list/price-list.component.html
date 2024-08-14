@@ -22,8 +22,8 @@
         <thead>
           <tr>
             <td>التحليل</td>
-            <td>سعر المعمل</td>
             <td>سعر المريض</td>
+            <td>سعر المعمل</td>
             <td>التيم</td>
           </tr>
         </thead>
@@ -33,7 +33,7 @@
               [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
               <td>{{test.name}}</td>
               <td>{{test.price}}</td>
-              <td>{{test?.patient}}</td>
+              <td>{{test.price - (test.team??0) }}</td>
               <td>{{test?.team}}</td>
             </tr>
           </ng-container>
@@ -61,24 +61,17 @@
         </div>
       </div>
       <div class="form-group flex-grow">
-        <label>سعر المعمل</label>
-        <div>
-          <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-            #price="ngModel" [(ngModel)]="modal.price" name="price" type="text" placeholder="0">
-        </div>
-      </div>
-      <div class="form-group flex-grow">
         <label>سعر المريض</label>
         <div>
           <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-            #patient="ngModel" [(ngModel)]="modal.patient" name="patient" type="text" placeholder="0">
+            #patient="ngModel" [(ngModel)]="modal.price" name="patient" type="number" placeholder="0">
         </div>
       </div>
       <div class="form-group flex-grow">
         <label>التيم</label>
         <div>
           <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-            #team="ngModel" [(ngModel)]="modal.team" name="team" type="text" placeholder="0">
+            #team="ngModel" [(ngModel)]="modal.team" name="team" type="number" placeholder="0">
         </div>
       </div>
     </div>
