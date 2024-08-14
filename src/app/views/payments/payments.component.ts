@@ -53,9 +53,11 @@ export class PaymentsComponent implements OnInit {
       } else {
         patient.tests.forEach((test: any) => {
           teamPercentage += +test.team || 0;
-          labPercentage += +test.price - (+test.team || 0) - patient.disscount;
+          labPercentage += +test.price - (+test.team || 0);
         });
       }
+      console.log(labPercentage);
+      labPercentage -= +patient.disscount || 0;
     });
 
     this.mony = {
