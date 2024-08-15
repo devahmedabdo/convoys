@@ -9,6 +9,7 @@ import {
   FaIconLibrary,
   FontAwesomeModule,
 } from '@fortawesome/angular-fontawesome';
+// import { Clipboard } from '@angular/cdk/clipboard';
 
 import { SwiperModule } from 'swiper/angular';
 
@@ -20,11 +21,13 @@ import { PaymentsComponent } from './views/payments/payments.component';
 import { PriceListComponent } from './views/price-list/price-list.component';
 import { HeaderComponent } from './layout/header/header.component';
 // import { ModalModule } from 'ngx-modal';
+// import { ClipboardModule } from '@angular/cdk/clipboard';
 
 // import { BlogsComponent } from './views/blogs/blogs.component';
 // import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { SettingsComponent } from './views/settings/settings.component';
+import { LabhelperComponent } from './views/labhelper/labhelper.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +37,7 @@ import { SettingsComponent } from './views/settings/settings.component';
     PriceListComponent,
     HeaderComponent,
     SettingsComponent,
+    LabhelperComponent,
   ],
   imports: [
     HttpClientModule,
@@ -44,6 +48,7 @@ import { SettingsComponent } from './views/settings/settings.component';
     ReactiveFormsModule,
     FormsModule,
     BrowserAnimationsModule,
+    // Clipboard
     // ModalModule,
     // ModalModule,
   ],

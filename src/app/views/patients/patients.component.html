@@ -50,6 +50,7 @@
               <td>{{patient.code}}</td>
               <td>
                 {{patient.name}}
+                <br>
                 {{patient?.phone}}
 
               </td>
@@ -90,8 +91,8 @@
 <!-- modals -->
 <div *ngIf="modal.type" class="modal">
   <!-- button to close modal -->
-  <button [@fade] (click)="resetModal()"></button>
-  <div [@uReveal]>
+  <button @fade (click)="resetModal()"></button>
+  <div @uReveal>
     <!-- modal header -->
     <div>
       <h3>{{modal.data.name}}</h3>

@@ -45,9 +45,9 @@
           <table>
             <thead>
               <tr>
-                <td> التحليل</td>
+                <td style="width: 100%;"> التحليل</td>
                 <td>السعر ({{total}})</td>
-                <td class="w-24" (click)="request=[]">
+                <td (click)="request=[]">
                   حذف الكل
 
 
@@ -57,7 +57,7 @@
             <tbody>
 
               <tr *ngFor="let req of request;let i =index">
-                <td class="w-32">{{req.name}}</td>
+                <td>{{req.name}}</td>
                 <td>{{req.price}}</td>
                 <td>
                   <button (click)="remove(i)" class="btn error">
@@ -116,7 +116,7 @@
           <ng-container *ngFor="let test of tests">
             <tr
               [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
-              <td class="w-32">{{test.name}}</td>
+              <td>{{test.name}}</td>
               <td>{{test.price}}</td>
               <td>
                 <button class="primary btn" (click)="add(test)" [disabled]="isDublicate(test,request)">

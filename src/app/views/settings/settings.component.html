@@ -8,8 +8,8 @@
         استيراد قائمة اسعار
       </button>
       <button (click)="download('priceList')" class="btn primary">تحميل قائمة اسعار</button>
-      <button (click)="file.click()" class="btn primary">
-        <input #file type="file" hidden (change)="openFile($event,'patients')">
+      <button (click)="patientsfile.click()" class="btn primary">
+        <input #patientsfile type="file" hidden (change)="openFile($event,'patients')">
         استيراد قائمة المرضى
       </button>
       <button (click)="download('patients')" class="btn primary">تحميل قائمة المرضى</button>

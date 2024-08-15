@@ -17,6 +17,9 @@ export class PriceListComponent implements OnInit {
     this.modal = JSON.parse(JSON.stringify(test));
     this.modal.index = index;
   }
+  print() {
+    window.print();
+  }
   searchCode: string = '';
   modal: any = null;
   searchName: string = '';

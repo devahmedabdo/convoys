@@ -1,5 +1,5 @@
 <div class="container flex flex-col gap-4">
-  <form #loginForm="ngForm" class="flex gap-2 flex-wrap mt-2">
+  <form #loginForm="ngForm" class="flex gap-2 flex-wrap mt-2 no-print">
     <div class="form-group flex-grow">
       <label for="code">كود التحليل</label>
       <div>
@@ -15,7 +15,17 @@
       </div>
     </div>
   </form>
-  <hr>
+  <div class="print:flex hidden justify-between items-center">
+    <h3 class="text-2xl font-bold">معمل المحور</h3>
+    <img class="w-20" src="assets/logo.png" alt="logo">
+  </div>
+  <div class="no-print  flex justify-end ">
+    <button (click)="print()" class="btn primary flex gap-2 items-center">
+      <span>PDF</span>
+      <fa-icon [icon]="'file-pdf'"></fa-icon>
+    </button>
+  </div>
+
   <div class="data-tabel">
     <div>
       <table>
@@ -29,7 +39,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let test of tests;let i=index">
-            <tr (click)="openSimpleModal(test,i)"
+            <tr [ngClass]="{'no-print':test.team == undefined}" (click)="openSimpleModal(test,i)"
               [hidden]="(searchCode != test.code && searchCode != '' && searchName == '' ) || ( !test.name.toLowerCase().includes(searchName)  && searchName != '' && searchCode == '' )">
               <td>{{test.name}}</td>
               <td>{{test.price}}</td>
