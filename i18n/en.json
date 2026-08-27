@@ -382,7 +382,12 @@
       "update": "Update now",
       "later": "Later",
       "offline": "You are offline — the app works fully without a connection.",
-      "online": "Back online"
+      "online": "Online",
+      "offlineShort": "Offline",
+      "onlineHint": "Connected to the internet",
+      "readyHint": "Ready to work offline — everything is stored on this device.",
+      "preparingHint": "Preparing an offline copy… keep the page open until it finishes.",
+      "strandedHint": "The offline copy was never finished — reconnect and open the app once so it can save itself."
     },
     "receipt": {
       "title": "Receipt",
