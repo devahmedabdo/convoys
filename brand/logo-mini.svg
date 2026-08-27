@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="17" stroke-linecap="round">
+    <line x1="34" y1="22" x2="20" y2="74" />
+    <line x1="54" y1="22" x2="40" y2="74" />
+  </g>
+  <circle cx="74" cy="64" r="14" stroke="currentColor" stroke-width="2.8" />
+  <rect x="69.8" y="31" width="8.4" height="20" rx="1.6" fill="currentColor" />
+  <rect x="65.5" y="24.6" width="17" height="6.8" rx="1.7" fill="currentColor" />
+  <clipPath id="convoys-bulb"><circle cx="74" cy="64" r="11.2" /></clipPath>
+  <path clip-path="url(#convoys-bulb)" fill="currentColor"
+        d="M60 62 q7 -6 14 0 t14 0 V78 H60 Z" />
+</svg>
